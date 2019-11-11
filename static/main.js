@@ -19,7 +19,7 @@ class Profile {
         console.log(`Authorization ${this.login}`)
         return ApiConnector.performLogin({username: this.login, password: this.password}, (err, data) => {
             console.log(`User ${this.login} authorized`);
-           callback(err, data);
+            callback(err, data);
         });
     }
 
@@ -61,6 +61,42 @@ function main(){
         username: 'ivan',
         name: { firstName: 'Ivan', lastName: 'Chernyshev' },
         password: 'ivanspass',
+    });
+
+    const Sergey = new Profile({
+        username: 'sergey89',
+        name: {firstName: 'Sergey', lastName: 'Petrov'},
+        password: 'qwerty89',
+    })
+
+    Ivan.addNewUser((err, data) => {
+        if(err) {
+            console.error(`error creating user`);
+        } else {
+            console.log(`user is created`);
+
+            this.auth((err, data) => {
+                if(err) {
+                    console.log(`error authorization`);
+                } else {
+                    console.log(`user authorized`);
+
+                    this.addMoney({ currency: 'RUB', amount: 100 }, (err, data) => {
+                        if (err) {
+                            console.error(`Error during adding money to `);
+                        } else {
+                            console.log(`Added  to `);
+
+                            // const currency = getCurrency();
+                            // let convertSum = this.addMoney.amount * currency.RUB_NETCOIN
+
+
+                        }
+                    })
+                }
+
+            })
+        }
     });
 }
 
