@@ -57,19 +57,19 @@ const getCurrency = (callback) => {
 }
 
 function main(){
-    const Ivan = new Profile({
+    const ivan = new Profile({
         username: 'ivan',
         name: { firstName: 'Ivan', lastName: 'Chernyshev' },
         password: 'ivanspass',
     });
 
-    const Sergey = new Profile({
+    const sergey = new Profile({
         username: 'sergey89',
         name: {firstName: 'Sergey', lastName: 'Petrov'},
         password: 'qwerty89',
     })
 
-    Ivan.addNewUser((err, data) => {
+    ivan.addNewUser((err, data) => {
         if(err) {
             console.error(`error creating user`);
         } else {
@@ -77,20 +77,42 @@ function main(){
 
             this.auth((err, data) => {
                 if(err) {
-                    console.log(`error authorization`);
+                    console.error(`error authorization`);
                 } else {
                     console.log(`user authorized`);
 
-                    this.addMoney({ currency: 'RUB', amount: 100 }, (err, data) => {
+                    this.addMoney({ currency: 'RUB', amount: 100000 }, (err, data) => {
                         if (err) {
-                            console.error(`Error during adding money to `);
+                            console.error(`Error during adding money to ${username}`);
                         } else {
-                            console.log(`Added  to `);
+                            console.log(`Added ${amount} ${currency} to ${username}`);
 
-                            // const currency = getCurrency();
-                            // let convertSum = this.addMoney.amount * currency.RUB_NETCOIN
+                            const currencyList = getCurrency();
+                            let convertSum = this.addMoney.amount * currencyList.RUB_NETCOIN;
 
+                            this.convertCurrency({fromCurrency: 'RUB', targetCurrency: 'NETCOIN', targetAmount: convertSum}, (err, data) => {
+                                if(err) {
+                                    console.error(`Conversion error`);
+                                } else {
+                                    console.log(`Converted from RUB to NETCOIN`);
 
+                                    sergey.addNewUser((err, data) => {
+                                        if(err) {
+                                            console.error(`error creating user`);
+                                        } else {
+                                            console.log(`user is created`);
+
+                                            this.transferToken({to: sergey, amount: convertSum}, (err, data) => {
+                                                if(err) {
+                                                    console.error(`Transfer error`);
+                                                } else {
+                                                    console.log(`Transfer money`)
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            })
                         }
                     })
                 }
