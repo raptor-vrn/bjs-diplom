@@ -75,13 +75,13 @@ function main(){
         } else {
             console.log(`user is created`);
 
-            this.auth((err, data) => {
+            ivan.auth((err, data) => {
                 if(err) {
                     console.error(`error authorization`);
                 } else {
                     console.log(`user authorized`);
 
-                    this.addMoney({ currency: 'RUB', amount: 100000 }, (err, data) => {
+                    ivan.addMoney({ currency: 'RUB', amount: 100000 }, (err, data) => {
                         if (err) {
                             console.error(`Error during adding money to ${username}`);
                         } else {
@@ -90,7 +90,7 @@ function main(){
                             const currencyList = getCurrency();
                             let convertSum = this.addMoney.amount * currencyList.RUB_NETCOIN;
 
-                            this.convertCurrency({fromCurrency: 'RUB', targetCurrency: 'NETCOIN', targetAmount: convertSum}, (err, data) => {
+                            ivan.convertCurrency({fromCurrency: 'RUB', targetCurrency: 'NETCOIN', targetAmount: convertSum}, (err, data) => {
                                 if(err) {
                                     console.error(`Conversion error`);
                                 } else {
@@ -102,7 +102,7 @@ function main(){
                                         } else {
                                             console.log(`user is created`);
 
-                                            this.transferToken({to: sergey, amount: convertSum}, (err, data) => {
+                                            ivan.transferToken({to: sergey, amount: convertSum}, (err, data) => {
                                                 if(err) {
                                                     console.error(`Transfer error`);
                                                 } else {
