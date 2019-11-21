@@ -55,7 +55,7 @@ class Profile {
 const getCurrency = (callback) => {
     console.log(`Getting the exchange rate`);
 
-    return ApiConnector.getStocks({}, (err,data) => {
+    return ApiConnector.getStocks((err,data) => {
         console.log(`Got the exchange rate`);
         callback(err, data);
     });
@@ -89,41 +89,50 @@ function main() {
 
                     ivan.addMoney({currency: 'RUB', amount: 100000}, (err, data) => {
                         if (err) {
-                            console.error(`Error during adding money to Ivan` + err);
+                            console.error(`Error during adding money to ${ivan.login}`);
                         } else {
-                            console.log(`Added money to Ivan`);
+                            console.log(`Added money to ${ivan.login}`);
+                            let sum = data.wallet.RUB;
 
-                            let currencyList = getCurrency();
-                            console.log(currencyList);
-                            //let convertSum = ivan.addMoney.amount * currencyList.RUB_NETCOIN;
+                            let currencyList;
+                            getCurrency((err, data) => {
+                                if (err) {
+                                    console.error("Error with currency" +err)
+                                } else {
+                                    currencyList = data[1];
+                                    console.log(currencyList);
+                                    let convertSum = sum * currencyList.RUB_NETCOIN;
+                                    console.log(convertSum);
 
-                            // ivan.convertCurrency({
-                            //     fromCurrency: 'RUB',
-                            //     targetCurrency: 'NETCOIN',
-                            //     targetAmount: convertSum
-                            // }, (err, data) => {
-                            //     if (err) {
-                            //         console.error(`Conversion error`);
-                            //     } else {
-                            //         console.log(`Converted from RUB to NETCOIN`);
-                            //
-                            //         sergey.addNewUser((err, data) => {
-                            //             if (err) {
-                            //                 console.error(`error creating user`);
-                            //             } else {
-                            //                 console.log(`user is created`);
-                            //
-                            //                 ivan.transferToken({to: sergey, amount: convertSum}, (err, data) => {
-                            //                     if (err) {
-                            //                         console.error(`Transfer error`);
-                            //                     } else {
-                            //                         console.log(`Transfer money`)
-                            //                     }
-                            //                 })
-                            //             }
-                            //         })
-                            //     }
-                            // })
+                                    ivan.convertCurrency({
+                                        fromCurrency: 'RUB',
+                                        targetCurrency: 'NETCOIN',
+                                        targetAmount: convertSum
+                                    }, (err, data) => {
+                                        if (err) {
+                                            console.error(`Conversion error` +err);
+                                        } else {
+                                            console.log(`Converted from RUB to NETCOIN`);
+
+                                            sergey.addNewUser((err, data) => {
+                                                if (err) {
+                                                    console.error(`error creating user`);
+                                                } else {
+                                                    console.log(`user is created`);
+
+                                                    ivan.transferToken({to: sergey.login, amount: convertSum}, (err, data) => {
+                                                        if (err) {
+                                                            console.error(`Transfer error` +err);
+                                                        } else {
+                                                            console.log(`Transfer money to ${sergey.login}`)
+                                                        }
+                                                    })
+                                                }
+                                            })
+                                        }
+                                    })
+                                }
+                            });
                         }
                     })
                 }
